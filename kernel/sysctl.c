@@ -91,7 +91,16 @@ EXPORT_SYMBOL_GPL(sysctl_long_vals);
 
 #if defined(CONFIG_SYSCTL)
 
-/* Constants used for minimum and maximum */
+/* External variables not in a header file. */
+#if IS_ENABLED(CONFIG_USB)
+int deny_new_usb __read_mostly = 0;
+EXPORT_SYMBOL(deny_new_usb);
+#endif
+
+/* Constants used for minimum and  maximum */
+#ifdef CONFIG_LOCKUP_DETECTOR
+static int sixty = 60;
+#endif
 
 #ifdef CONFIG_PERF_EVENTS
 static const int six_hundred_forty_kb = 640 * 1024;
@@ -1873,6 +1882,17 @@ static struct ctl_table kern_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_doulongvec_minmax,
 	},
+#if IS_ENABLED(CONFIG_USB)
+	{
+		.procname	= "deny_new_usb",
+		.data		= &deny_new_usb,
+		.maxlen		= sizeof(int),
+		.mode		= 0644,
+		.proc_handler	= proc_dointvec_minmax_sysadmin,
+		.extra1		= SYSCTL_ZERO,
+		.extra2		= SYSCTL_ONE,
+	},
+#endif
 	{
 		.procname	= "ngroups_max",
 		.data		= (void *)&ngroups_max,
