@@ -99,7 +99,7 @@ EXPORT_SYMBOL(deny_new_usb);
 
 /* Constants used for minimum and  maximum */
 #ifdef CONFIG_LOCKUP_DETECTOR
-static int sixty __read_only = 60;
+static int sixty = 60;
 #endif
 
 #ifdef CONFIG_PERF_EVENTS
